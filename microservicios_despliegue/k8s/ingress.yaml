@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microservicios-ingress
+  namespace: microservicios
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: app-publicaciones.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ms-publicaciones-service
+            port:
+              number: 8080
+      - path: /notificaciones
+        pathType: Prefix
+        backend:
+          service:
+            name: ms-notificaciones-service
+            port:
+              number: 8080
+      - path: /catalogo
+        pathType: Prefix
+        backend:
+          service:
+            name: ms-catalogo-service
+            port:
+              number: 8080

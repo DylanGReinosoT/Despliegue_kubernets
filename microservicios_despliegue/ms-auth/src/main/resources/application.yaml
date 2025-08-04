@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ms-auth
+    username: postgres
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8888
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url.default-zone: ${EUREKA_SERVER_URL:http://localhost:8761}/eureka/
+
+jwt:
+  secret: u6rckmOPVwT9OuoWZf9lZtabfM6TTRGTYiS6OQ4Nkb8= # ej. generado con `openssl rand -base64 32`
+  expirationMs: 3600000 # 1�hora en ms
+
+logging.level.org.springframework.security: DEBUG

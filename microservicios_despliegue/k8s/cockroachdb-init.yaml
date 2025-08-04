@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cockroachdb-init
+  namespace: microservicios
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: cockroachdb-init
+        image: cockroachdb/cockroach:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          echo "Esperando que CockroachDB esté listo..."
+          while ! cockroach sql --insecure --host=cockroach-service:26257 --execute="SELECT 1;" > /dev/null 2>&1; do
+            echo "CockroachDB no está listo aún, esperando..."
+            sleep 5
+          done
+          
+          echo "CockroachDB está listo, creando bases de datos..."
+          
+          cockroach sql --insecure --host=cockroach-service:26257 --execute="CREATE DATABASE IF NOT EXISTS dbpublications;"
+          echo "Base de datos dbpublications creada"
+          
+          cockroach sql --insecure --host=cockroach-service:26257 --execute="CREATE DATABASE IF NOT EXISTS dbnotifications;"
+          echo "Base de datos dbnotifications creada"
+          
+          cockroach sql --insecure --host=cockroach-service:26257 --execute="CREATE DATABASE IF NOT EXISTS dbcatalogo;"
+          echo "Base de datos dbcatalogo creada"
+          
+          echo "Todas las bases de datos han sido creadas exitosamente"

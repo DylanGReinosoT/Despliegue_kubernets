@@ -1,0 +1,52 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: SERVICIO-SINCRONIZACION
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+reloj:
+  intervalo: 10
+
+---
+# Perfil para Docker/Kubernetes
+spring:
+  config:
+    activate:
+      on-profile: docker
+  application:
+    name: SERVICIO-SINCRONIZACION
+  rabbitmq:
+    host: rabbitmq-service
+    port: 5672
+    username: admin
+    password: admin
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+reloj:
+  intervalo: 10
